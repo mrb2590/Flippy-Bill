@@ -39,6 +39,14 @@ module.exports = (env) => {
         {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader']
+        },
+        {
+          test: /\.(ogg|mp3|wav|mpe?g)$/i,
+          loader: 'file-loader',
+          options: {
+            outputPath: 'audio',
+            name: '[name].[contenthash].[ext]'
+          }
         }
       ]
     },

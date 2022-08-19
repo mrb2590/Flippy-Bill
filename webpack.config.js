@@ -14,7 +14,7 @@ module.exports = (env) => {
   }
 
   return {
-    entry: './src/index.js',
+    entry: './src/main.js',
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'dist'),

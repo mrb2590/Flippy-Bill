@@ -5,12 +5,20 @@ const path = require('path');
 require('dotenv').config();
 
 module.exports = (env) => {
-  const appName = `${process.env.APP_NAME}${env.production ? '' : ' (Development)'}`;
+  const appName = `${process.env.APP_NAME}${
+    env.production ? '' : ' (Development)'
+  }`;
 
   if (env.production) {
-    console.warn('\x1b[31m\x1b[1m%s\x1b[0m\x1b[0m', '** Building for production **\r\n');
+    console.warn(
+      '\x1b[31m\x1b[1m%s\x1b[0m\x1b[0m',
+      '** Building for production **\r\n'
+    );
   } else {
-    console.warn('\x1b[36m\x1b[1m%s\x1b[0m\x1b[0m', '** Building for development **\r\n');
+    console.warn(
+      '\x1b[36m\x1b[1m%s\x1b[0m\x1b[0m',
+      '** Building for development **\r\n'
+    );
   }
 
   return {
@@ -39,6 +47,10 @@ module.exports = (env) => {
         {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader']
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource'
         },
         {
           test: /\.(ogg|mp3|wav|mpe?g)$/i,

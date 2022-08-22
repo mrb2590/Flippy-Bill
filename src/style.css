@@ -1,4 +1,4 @@
-canvas {
+canvas#gameCanvas {
   border: 1px solid #000;
   width: 100%;
   height: auto;

@@ -1,6 +1,6 @@
 {
   "i18n-ally.localesPaths": ["lang"],
-  "[html,js,jsonc]": {
+  "[html,js,json,jsonc]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
   "editor.codeActionsOnSave": {

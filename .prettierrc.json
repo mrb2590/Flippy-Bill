@@ -1,17 +1,7 @@
 {
     "tabWidth": 2,
     "singleQuote": true,
-    "printWidth": 120,
+    "printWidth": 80,
     "bracketSpacing": false,
-    "semi": true,
-    "vueIndentScriptAndStyle": true,
-    "phpVersion": "8.1",
-    "overrides": [
-        {
-            "files": "*.php",
-            "options": {
-                "tabWidth": 4
-            }
-        }
-    ]
+    "semi": true
 }

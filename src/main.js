@@ -3,8 +3,5 @@ import { Game } from './Game';
 
 window.onload = () => {
   const game = new Game();
-
   game.start();
 };
-
-// import './old/main.js';

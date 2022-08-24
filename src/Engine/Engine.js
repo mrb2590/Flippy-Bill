@@ -6,6 +6,8 @@ export class Engine {
     this.canvas.width = canvasWidth;
     this.canvas.height = canvasHeight;
     this.ctx = this.canvas.getContext('2d');
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
     this.tickRate = 60;
     this.tickInterval = 1000 / this.tickRate;
     this.pastTickTimestamp = null;
@@ -14,12 +16,6 @@ export class Engine {
     this.debug = true;
     this.eventListeners = [];
     this.physics = new Physics();
-    this.scene = {
-      top: 0,
-      left: 0,
-      right: this.canvas.width,
-      bottom: this.canvas.height
-    };
   }
 
   gameLoop (timestamp) {
@@ -73,7 +69,7 @@ export class Engine {
 
   bindEventListeners () {
     for (let i = 0; i < this.eventListeners.length; i++) {
-      this.eventListeners[i].bind();
+      this.eventListeners[i]();
     }
   }
 }

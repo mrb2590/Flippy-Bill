@@ -1,5 +1,5 @@
 export class Physics {
   constructor () {
-    this.gravity = 2.5;
+    this.gravity = 2;
   }
 }

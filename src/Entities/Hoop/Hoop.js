@@ -9,10 +9,10 @@ export class Hoop extends Entity {
   constructor (game) {
     super({
       game,
-      x: game.scene.right,
+      x: game.scene.width,
       y: Math.floor(
-        Math.random() * (game.scene.top - (game.scene.bottom - 300) + 1) +
-          game.scene.bottom -
+        Math.random() * (game.scene.y - (game.scene.height - 300) + 1) +
+          game.scene.height -
           300
       ),
       velocityX: -5,
@@ -57,5 +57,14 @@ export class Hoop extends Entity {
 
     this.spriteLeft.update({ x: this.x, y: this.y });
     this.spriteRight.update({ x: this.x, y: this.y });
+  }
+
+  checkPlayerCollision () {
+    return (
+      this.game.player.x > this.x &&
+      this.game.player.x + this.game.player.width < this.x + this.width &&
+      (this.y > this.game.player.y ||
+        this.y + this.height > this.game.player.y + this.game.player.height)
+    );
   }
 }

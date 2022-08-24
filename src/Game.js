@@ -1,6 +1,7 @@
 import { Engine } from './Engine/Engine';
 import { Player } from './Entities/Player/Player';
 import { Hoop } from './Entities/Hoop/Hoop';
+import { Scene } from './Entities/Scene/Scene';
 
 export class Game extends Engine {
   constructor () {
@@ -10,20 +11,44 @@ export class Game extends Engine {
       canvasHeight: 1080
     });
 
+    this.gameOver = true;
+    this.isPaused = false;
+    this.scene = new Scene(this);
     this.player = new Player(this);
     this.hoopQueue = [];
+
+    this.eventListeners.push(() => {
+      return this.canvas.addEventListener('keydown', (event) => {
+        console.log(this);
+        if (event.code === 'Space') {
+          if (this.gameOver) {
+            this.resetGame();
+          }
+        }
+      });
+    });
   }
 
   update () {
     super.update();
+
+    if (this.isPaused || this.gameOver) {
+      return;
+    }
+
+    this.scene.update();
     this.player.update();
     let shift = false;
+
+    if (this.player.checkGroundCollision()) {
+      this.gameOver = true;
+    }
 
     if (
       this.hoopQueue.length === 0 ||
       (this.hoopQueue.length > 0 &&
         this.hoopQueue[this.hoopQueue.length - 1].x <
-          this.scene.right - Hoop.width - 300)
+          this.scene.width - Hoop.width - 300)
     ) {
       this.hoopQueue.push(new Hoop(this));
     }
@@ -34,6 +59,10 @@ export class Game extends Engine {
       if (this.hoopQueue[i].x + Hoop.width <= 0) {
         shift = true;
       }
+
+      if (this.hoopQueue[i].checkPlayerCollision()) {
+        console.log('hit');
+      }
     }
 
     if (shift) {
@@ -43,6 +72,7 @@ export class Game extends Engine {
 
   render () {
     super.render();
+    this.scene.render();
 
     for (let i = 0; i < this.hoopQueue.length; i++) {
       this.hoopQueue[i].renderLeft();
@@ -53,5 +83,11 @@ export class Game extends Engine {
     for (let i = 0; i < this.hoopQueue.length; i++) {
       this.hoopQueue[i].renderRight();
     }
+  }
+
+  resetGame () {
+    this.player.reset();
+    this.hoopQueue = [];
+    this.gameOver = false;
   }
 }

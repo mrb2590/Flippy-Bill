@@ -15,7 +15,7 @@ export class Pipe extends Entity {
       velocityX: 5
     });
 
-    this.topPipeY = Pipe.getRandomtopY(-300, -50);
+    this.topPipeY = Pipe.getRandomtopY(-350, -100);
     this.bottomPipeY = this.topPipeY + Pipe.height + Pipe.gapHeight;
   }
 

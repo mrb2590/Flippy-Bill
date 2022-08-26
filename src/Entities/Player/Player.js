@@ -1,11 +1,11 @@
 import { Entity } from '../../Engine/Entity';
 import { Sprite } from '../../Engine/Sprite';
-import jumpSound from './jump.mp3';
+import { Pipe } from '../Pipe/Pipe';
+import jumpSound from './wing-flap.mp3';
 import splatSound from './splat.mp3';
 import backflipSound from './backflip.mp3';
 import crashSound from './crash.mp3';
 import spriteSrc from './player.png';
-import { Pipe } from '../Pipe/Pipe';
 
 export class Player extends Entity {
   static width = 64;
@@ -95,11 +95,13 @@ export class Player extends Entity {
     if (Math.random() > this.backFlipChance && !this.isBackFlipping) {
       this.isBackFlipping = true;
       const sound = new Audio(backflipSound);
-      sound.play();
-    } else {
-      const sound = new Audio(jumpSound);
+      sound.volume = 1;
       sound.play();
     }
+
+    const sound = new Audio(jumpSound);
+    sound.volume = 0.3;
+    sound.play();
   }
 
   handleJumpEvent () {
@@ -114,6 +116,7 @@ export class Player extends Entity {
     this.spriteSplat();
     this.isSplatting = true;
     const sound = new Audio(splatSound);
+    sound.volume = 0.5;
     sound.play();
   }
 

@@ -109,6 +109,7 @@ export class Game extends Engine {
 
     setTimeout(() => {
       const sound = new Audio(gameOverSound);
+      sound.volume = 0.6;
       sound.play();
     }, 500);
   }

@@ -3,7 +3,9 @@ import { Sprite } from '../../Engine/Sprite';
 import jumpSound from './jump.mp3';
 import splatSound from './splat.mp3';
 import backflipSound from './backflip.mp3';
+import crashSound from './crash.mp3';
 import spriteSrc from './player.png';
+import { Pipe } from '../Pipe/Pipe';
 
 export class Player extends Entity {
   static resetVals = {
@@ -17,9 +19,7 @@ export class Player extends Entity {
     super({
       game,
       x: Player.resetVals.x,
-      y: Player.resetVals.y,
-      velocityX: Player.resetVals.velocityX,
-      velocityY: Player.resetVals.velocityY
+      y: Player.resetVals.y
     });
 
     this.width = 64;
@@ -48,9 +48,14 @@ export class Player extends Entity {
     this.backFlipChance = 0.8;
 
     this.game.eventListeners.push(() => {
-      return this.game.canvas.addEventListener('keydown', (event) => {
+      return document.body.addEventListener('mousedown', (event) => {
+        this.handleJumpEvent();
+      });
+    });
+    this.game.eventListeners.push(() => {
+      return document.body.addEventListener('keydown', (event) => {
         if (event.code === 'Space') {
-          this.jump();
+          this.handleJumpEvent();
         }
       });
     });
@@ -77,6 +82,10 @@ export class Player extends Entity {
   }
 
   jump () {
+    if (this.game.gameOver || this.game.inMenu) {
+      return;
+    }
+
     this.isJumping = true;
     this.jumpTick = 0;
     this.velocityY = this.jumpV;
@@ -91,10 +100,23 @@ export class Player extends Entity {
     }
   }
 
+  handleJumpEvent () {
+    if (this.game.isPaused) {
+      return;
+    }
+
+    this.jump();
+  }
+
   splat () {
     this.spriteSplat();
     this.isSplatting = true;
     const sound = new Audio(splatSound);
+    sound.play();
+  }
+
+  crash () {
+    const sound = new Audio(crashSound);
     sound.play();
   }
 
@@ -121,6 +143,11 @@ export class Player extends Entity {
   }
 
   update () {
+    if (this.game.inMenu) {
+      this.sprite.update({ x: this.x, y: this.y });
+      return;
+    }
+
     this.velocityY += this.game.gravity;
     this.y += this.velocityY;
 
@@ -135,7 +162,9 @@ export class Player extends Entity {
       this.y = this.game.scene.floor - this.height;
       this.velocityY = 0;
 
-      this.splat();
+      if (!this.isSplatting) {
+        this.splat();
+      }
     }
 
     if (this.isJumping) {
@@ -169,5 +198,22 @@ export class Player extends Entity {
 
   checkGroundCollision () {
     return this.y >= this.game.scene.floor - this.height;
+  }
+
+  checkPipeCollision () {
+    for (let i = 0; i < Pipe.queue.length; i++) {
+      if (
+        this.x + this.width > Pipe.queue[i].x &&
+        this.x < Pipe.queue[i].x + Pipe.width &&
+        (this.y < Pipe.queue[i].topPipeY + Pipe.height ||
+          this.y + this.height > Pipe.queue[i].bottomPipeY)
+      ) {
+        this.crash();
+
+        return true;
+      }
+    }
+
+    return false;
   }
 }

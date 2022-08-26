@@ -3,9 +3,9 @@ import { Entity } from '../../Engine/Entity';
 export class Pipe extends Entity {
   static queue = [];
   static height = 500;
-  static width = 75;
+  static width = 80;
   static gapBetweenPipes = 300;
-  static gapHeight = 200;
+  static gapHeight = 220;
 
   constructor (game) {
     super({
@@ -15,7 +15,7 @@ export class Pipe extends Entity {
       velocityX: 5
     });
 
-    this.topPipeY = Pipe.getRandomtopY(-300, 0);
+    this.topPipeY = Pipe.getRandomtopY(-300, -50);
     this.bottomPipeY = this.topPipeY + Pipe.height + Pipe.gapHeight;
   }
 
@@ -24,6 +24,10 @@ export class Pipe extends Entity {
   }
 
   static updatePipes (game) {
+    if (game.gameOver || game.inMenu) {
+      return;
+    }
+
     let shift = false;
 
     if (
@@ -41,10 +45,6 @@ export class Pipe extends Entity {
       if (Pipe.queue[i].x + Pipe.width <= 0) {
         shift = true;
       }
-
-      if (Pipe.queue[i].checkPlayerCollision()) {
-        game.gameOver = true;
-      }
     }
 
     if (shift) {
@@ -58,18 +58,49 @@ export class Pipe extends Entity {
     }
   }
 
+  static resetQueue () {
+    Pipe.queue = [];
+  }
+
   update () {
     this.x += -this.velocityX;
   }
 
   render () {
     this.game.ctx.fillStyle = '#000000';
+
+    let grd = this.game.ctx.createLinearGradient(0, 0, 100, 0);
+    grd.addColorStop(0, '#673ab7');
+    grd.addColorStop(1, '#381f65');
+
+    this.game.ctx.fillStyle = grd;
     this.game.ctx.fillRect(this.x, this.topPipeY, Pipe.width, Pipe.height);
+    this.game.ctx.fillRect(
+      this.x + 5,
+      this.topPipeY + 5,
+      Pipe.width - 10,
+      Pipe.height - 10
+    );
+
+    this.game.ctx.fillStyle = '#000000';
     this.game.ctx.fillRect(
       this.x,
       this.bottomPipeY,
       Pipe.width,
       this.game.scene.floor - this.bottomPipeY
+    );
+
+    grd = this.game.ctx.createLinearGradient(0, 0, 100, 0);
+    grd.addColorStop(0, '#673ab7');
+    grd.addColorStop(1, '#381f65');
+
+    this.game.ctx.fillStyle = grd;
+
+    this.game.ctx.fillRect(
+      this.x + 5,
+      this.bottomPipeY + 5,
+      Pipe.width - 10,
+      this.game.scene.floor - this.bottomPipeY - 10
     );
   }
 

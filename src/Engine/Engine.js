@@ -58,11 +58,12 @@ export class Engine {
   renderDebug () {
     this.ctx.fillStyle = 'white';
     this.ctx.globalAlpha = 0.5;
-    this.ctx.fillRect(0, 0, 125, 50);
+    this.ctx.fillRect(0, 0, 50, 20);
     this.ctx.globalAlpha = 1;
-    this.ctx.font = '25px Arial';
+    this.ctx.font = '10px Arial';
     this.ctx.fillStyle = '#000';
-    this.ctx.fillText(`FPS: ${this.fps}`, 10, 30);
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText(`FPS: ${this.fps}`, 25, 15, 50);
   }
 
   bindEventListeners () {

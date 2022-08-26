@@ -4,7 +4,6 @@ import jumpSound from './jump.mp3';
 import splatSound from './splat.mp3';
 import backflipSound from './backflip.mp3';
 import spriteSrc from './player.png';
-import spriteSplatSrc from './player-splat.png';
 
 export class Player extends Entity {
   static resetVals = {
@@ -23,9 +22,9 @@ export class Player extends Entity {
       velocityY: Player.resetVals.velocityY
     });
 
-    this.width = 72;
-    this.height = 125;
-    this.jumpV = -30;
+    this.width = 64;
+    this.height = 64;
+    this.jumpV = -15;
     this.sprite = new Sprite({
       src: spriteSrc,
       game: this.game,
@@ -33,30 +32,20 @@ export class Player extends Entity {
       y: this.y,
       width: this.width,
       height: this.height,
-      ticksPerFrame: 3
-    });
-    this.spriteSplat = new Sprite({
-      src: spriteSplatSrc,
-      game: this.game,
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height,
-      frames: 1,
+      frames: 3,
       frameIndex: 0,
       row: 0,
-      ticksPerFrame: 1
+      ticksPerFrame: 10
     });
-    this.spriteIdle();
     this.jumpTick = 0;
     this.isJumping = false;
     this.totalJumpTicks = 12 * this.sprite.ticksPerFrame;
     this.backflipTick = 0;
     this.isSplatting = false;
     this.isBackFlipping = false;
-    this.totalBackflipTicks =
-      3 * this.game.physics.gravity * this.sprite.ticksPerFrame;
+    this.totalBackflipTicks = this.game.gravity * this.sprite.ticksPerFrame;
     this.backFlipAngle = 0;
+    this.backFlipChance = 0.8;
 
     this.game.eventListeners.push(() => {
       return this.game.canvas.addEventListener('keydown', (event) => {
@@ -69,20 +58,20 @@ export class Player extends Entity {
 
   reset () {
     this.isSplatting = false;
-    this.spriteIdle();
+    this.spriteFlying();
     this.x = Player.resetVals.x;
     this.y = Player.resetVals.y;
     this.velocityX = Player.resetVals.velocityX;
   }
 
-  spriteJump () {
-    this.sprite.frames = 12;
+  spriteFlying () {
+    this.sprite.frames = 3;
     this.sprite.frameIndex = 0;
     this.sprite.row = 0;
   }
 
-  spriteIdle () {
-    this.sprite.frames = 4;
+  spriteSplat () {
+    this.sprite.frames = 1;
     this.sprite.frameIndex = 0;
     this.sprite.row = 1;
   }
@@ -91,9 +80,8 @@ export class Player extends Entity {
     this.isJumping = true;
     this.jumpTick = 0;
     this.velocityY = this.jumpV;
-    this.spriteJump();
 
-    if (Math.random() > 0.8 && !this.isBackFlipping) {
+    if (Math.random() > this.backFlipChance && !this.isBackFlipping) {
       this.isBackFlipping = true;
       const sound = new Audio(backflipSound);
       sound.play();
@@ -104,6 +92,7 @@ export class Player extends Entity {
   }
 
   splat () {
+    this.spriteSplat();
     this.isSplatting = true;
     const sound = new Audio(splatSound);
     sound.play();
@@ -127,16 +116,12 @@ export class Player extends Entity {
       this.game.ctx.resetTransform();
       this.game.ctx.restore();
     } else {
-      if (this.isSplatting) {
-        this.spriteSplat.render();
-      } else {
-        this.sprite.render();
-      }
+      this.sprite.render();
     }
   }
 
   update () {
-    this.velocityY += this.game.physics.gravity;
+    this.velocityY += this.game.gravity;
     this.y += this.velocityY;
 
     // Player has hit the ceiling
@@ -157,7 +142,6 @@ export class Player extends Entity {
       if (this.jumpTick >= this.totalJumpTicks) {
         this.isJumping = false;
         this.jumpTick = 0;
-        this.spriteIdle();
       }
 
       this.jumpTick++;
@@ -177,7 +161,6 @@ export class Player extends Entity {
     }
 
     this.sprite.update({ x: this.x, y: this.y });
-    this.spriteSplat.update({ x: this.x, y: this.y });
   }
 
   checkCeilingCollision () {

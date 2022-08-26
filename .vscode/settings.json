@@ -6,6 +6,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
   "eslint.validate": ["javascript"],
   "editor.formatOnSave": true
 }

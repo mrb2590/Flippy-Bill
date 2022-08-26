@@ -20,7 +20,7 @@ export class Scene extends Entity {
       color: '#58d826'
     };
 
-    this.floor = this.height - this.ground.height / 2;
+    this.floor = this.height - this.ground.height;
   }
 
   renderBackground () {
@@ -36,6 +36,13 @@ export class Scene extends Entity {
       this.ground.width,
       this.ground.height
     );
+    this.game.ctx.fillStyle = '#000';
+    this.game.ctx.fillRect(this.ground.x, this.ground.y, this.ground.width, 2);
+
+    for (let i = 0; i < this.ground.width; i += 10) {
+      this.game.ctx.fillStyle = i % 20 === 0 ? '#000' : '#fff';
+      this.game.ctx.fillRect(i, this.ground.y, 10, 10);
+    }
   }
 
   render () {

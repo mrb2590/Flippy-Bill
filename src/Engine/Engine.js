@@ -1,5 +1,3 @@
-import { Physics } from './Physics';
-
 export class Engine {
   constructor ({ canvasId, canvasWidth, canvasHeight }) {
     this.canvas = document.getElementById(canvasId);
@@ -15,7 +13,7 @@ export class Engine {
     this.fps = null;
     this.debug = true;
     this.eventListeners = [];
-    this.physics = new Physics();
+    this.gravity = 1;
   }
 
   gameLoop (timestamp) {
@@ -60,7 +58,7 @@ export class Engine {
   renderDebug () {
     this.ctx.fillStyle = 'white';
     this.ctx.globalAlpha = 0.5;
-    this.ctx.fillRect(0, 0, 100, 100);
+    this.ctx.fillRect(0, 0, 125, 50);
     this.ctx.globalAlpha = 1;
     this.ctx.font = '25px Arial';
     this.ctx.fillStyle = '#000';

@@ -68,13 +68,9 @@ export class Pipe extends Entity {
 
   render () {
     this.game.ctx.fillStyle = '#000000';
-
-    let grd = this.game.ctx.createLinearGradient(0, 0, 100, 0);
-    grd.addColorStop(0, '#673ab7');
-    grd.addColorStop(1, '#381f65');
-
-    this.game.ctx.fillStyle = grd;
     this.game.ctx.fillRect(this.x, this.topPipeY, Pipe.width, Pipe.height);
+
+    this.game.ctx.fillStyle = '#381f65';
     this.game.ctx.fillRect(
       this.x + 5,
       this.topPipeY + 5,
@@ -90,12 +86,7 @@ export class Pipe extends Entity {
       this.game.scene.floor - this.bottomPipeY
     );
 
-    grd = this.game.ctx.createLinearGradient(0, 0, 100, 0);
-    grd.addColorStop(0, '#673ab7');
-    grd.addColorStop(1, '#381f65');
-
-    this.game.ctx.fillStyle = grd;
-
+    this.game.ctx.fillStyle = '#381f65';
     this.game.ctx.fillRect(
       this.x + 5,
       this.bottomPipeY + 5,

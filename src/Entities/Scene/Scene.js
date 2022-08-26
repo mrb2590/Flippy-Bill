@@ -43,36 +43,14 @@ export class Scene extends Entity {
 
     for (let i = 0; i < this.ground.width + 100; i += 20) {
       this.game.ctx.fillStyle = '#fff';
-      this.game.ctx.fillRect(
-        i - this.ground.currentTick * 2.5,
-        this.ground.y,
-        10,
-        2
-      );
-      this.game.ctx.fillRect(
-        i - this.ground.currentTick * 2.5 + 2,
-        this.ground.y,
-        10,
-        2
-      );
-      this.game.ctx.fillRect(
-        i - this.ground.currentTick * 2.5 + 4,
-        this.ground.y,
-        10,
-        4
-      );
-      this.game.ctx.fillRect(
-        i - this.ground.currentTick * 2.5 + 6,
-        this.ground.y,
-        10,
-        6
-      );
-      this.game.ctx.fillRect(
-        i - this.ground.currentTick * 2.5 + 8,
-        this.ground.y,
-        10,
-        8
-      );
+      for (let j = 0; j < 10; j++) {
+        this.game.ctx.fillRect(
+          i - this.ground.currentTick * 2.5 - j * 3,
+          this.ground.y,
+          10,
+          j * 3
+        );
+      }
     }
   }
 

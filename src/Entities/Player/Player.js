@@ -8,6 +8,10 @@ import spriteSrc from './player.png';
 import { Pipe } from '../Pipe/Pipe';
 
 export class Player extends Entity {
+  static width = 64;
+  static height = 64;
+  static jumpVelocity = -15;
+
   static resetVals = {
     x: 200,
     y: 300,
@@ -22,21 +26,19 @@ export class Player extends Entity {
       y: Player.resetVals.y
     });
 
-    this.width = 64;
-    this.height = 64;
-    this.jumpV = -15;
     this.sprite = new Sprite({
       src: spriteSrc,
       game: this.game,
       x: this.x,
       y: this.y,
-      width: this.width,
-      height: this.height,
+      width: Player.width,
+      height: Player.height,
       frames: 3,
       frameIndex: 0,
       row: 0,
       ticksPerFrame: 10
     });
+
     this.jumpTick = 0;
     this.isJumping = false;
     this.totalJumpTicks = 12 * this.sprite.ticksPerFrame;
@@ -88,7 +90,7 @@ export class Player extends Entity {
 
     this.isJumping = true;
     this.jumpTick = 0;
-    this.velocityY = this.jumpV;
+    this.velocityY = Player.jumpVelocity;
 
     if (Math.random() > this.backFlipChance && !this.isBackFlipping) {
       this.isBackFlipping = true;
@@ -124,13 +126,13 @@ export class Player extends Entity {
     if (this.isBackFlipping) {
       this.game.ctx.save();
       this.game.ctx.translate(
-        this.x + this.width / 2,
-        this.y + this.height / 2
+        this.x + Player.width / 2,
+        this.y + Player.height / 2
       );
       this.game.ctx.rotate(this.backFlipAngle);
       this.game.ctx.translate(
-        -(this.x + this.width / 2),
-        -(this.y + this.height / 2)
+        -(this.x + Player.width / 2),
+        -(this.y + Player.height / 2)
       );
 
       this.sprite.render();
@@ -159,7 +161,7 @@ export class Player extends Entity {
 
     // Player has hit the floor
     if (this.checkGroundCollision()) {
-      this.y = this.game.scene.floor - this.height;
+      this.y = this.game.scene.floor - Player.height;
       this.velocityY = 0;
 
       if (!this.isSplatting) {
@@ -197,16 +199,16 @@ export class Player extends Entity {
   }
 
   checkGroundCollision () {
-    return this.y >= this.game.scene.floor - this.height;
+    return this.y >= this.game.scene.floor - Player.height;
   }
 
   checkPipeCollision () {
     for (let i = 0; i < Pipe.queue.length; i++) {
       if (
-        this.x + this.width > Pipe.queue[i].x &&
+        this.x + Player.width > Pipe.queue[i].x &&
         this.x < Pipe.queue[i].x + Pipe.width &&
         (this.y < Pipe.queue[i].topPipeY + Pipe.height ||
-          this.y + this.height > Pipe.queue[i].bottomPipeY)
+          this.y + Player.height > Pipe.queue[i].bottomPipeY)
       ) {
         this.crash();
 

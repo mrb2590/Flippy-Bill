@@ -38,20 +38,30 @@ export class Scene extends Entity {
       this.ground.width,
       this.ground.height
     );
+
     this.game.ctx.fillStyle = '#000';
     this.game.ctx.fillRect(this.ground.x, this.ground.y, this.ground.width, 2);
 
-    for (let i = 0; i < this.ground.width + 100; i += 20) {
-      this.game.ctx.fillStyle = '#fff';
-      for (let j = 0; j < 10; j++) {
+    this.game.ctx.fillStyle = '#fff';
+
+    for (let j = 0; j < 3; j++) {
+      for (let i = 0; i < this.ground.width / 20; i++) {
         this.game.ctx.fillRect(
-          i - this.ground.currentTick * 2.5 - j * 3,
-          this.ground.y,
-          10,
-          j * 3
+          i * (this.ground.width / 20) + j * 20,
+          this.ground.y + j * 5 + 2,
+          20,
+          5
         );
       }
     }
+
+    this.game.ctx.fillStyle = '#000';
+    this.game.ctx.fillRect(
+      this.ground.x,
+      this.ground.y + 17,
+      this.ground.width,
+      2
+    );
   }
 
   render () {

@@ -94,13 +94,4 @@ export class Pipe extends Entity {
       this.game.scene.floor - this.bottomPipeY - 10
     );
   }
-
-  checkPlayerCollision () {
-    return (
-      this.game.player.x + this.game.player.width > this.x &&
-      this.game.player.x < this.x + Pipe.width &&
-      (this.game.player.y < this.topPipeY + Pipe.height ||
-        this.game.player.y + this.game.player.height > this.bottomPipeY)
-    );
-  }
 }

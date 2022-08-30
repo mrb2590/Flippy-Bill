@@ -5,7 +5,7 @@ export class Pipe extends Entity {
   static height = 500;
   static width = 80;
   static gapBetweenPipes = 300;
-  static gapHeight = 220;
+  static gapHeight = 210;
 
   constructor (game) {
     super({

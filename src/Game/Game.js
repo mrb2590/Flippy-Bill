@@ -1,9 +1,10 @@
+import { AudioPlayer } from '../Engine/AudioPlayer';
 import { Engine } from '../Engine/Engine';
 import { Player } from '../Entities/Player/Player';
 import { Scene } from '../Entities/Scene/Scene';
 import { Pipe } from '../Entities/Pipe/Pipe';
-import gameOverSound from './game-over.mp3';
 import dingSound from './ding.mp3';
+import gameOverSound from './game-over.mp3';
 import points10Sound from './10-points.mp3';
 import points25Sound from './25-points.mp3';
 import points50Sound from './50-points.mp3';
@@ -16,6 +17,15 @@ export class Game extends Engine {
       canvasHeight: 720
     });
 
+    this.audioPlayer = new AudioPlayer({
+      audioFiles: {
+        gameOver: gameOverSound,
+        ding: dingSound,
+        points10: points10Sound,
+        points25: points25Sound,
+        points50: points50Sound
+      }
+    });
     this.gameOver = false;
     this.inMenu = true;
     this.isPaused = false;
@@ -99,6 +109,7 @@ export class Game extends Engine {
   }
 
   startMenu () {
+    this.audioPlayer.pauseAll();
     this.gameOver = false;
     this.inMenu = true;
     this.resetGame();
@@ -106,12 +117,7 @@ export class Game extends Engine {
 
   startGameOver () {
     this.gameOver = true;
-
-    setTimeout(() => {
-      const sound = new Audio(gameOverSound);
-      sound.volume = 0.6;
-      sound.play();
-    }, 500);
+    this.audioPlayer.playFromStart('gameOver', 0.5);
   }
 
   renderGameOver () {
@@ -222,8 +228,7 @@ export class Game extends Engine {
 
     for (let i = 0; i < Pipe.queue.length; i++) {
       if (Pipe.queue[i].x + Math.floor(Pipe.width) / 2 === this.player.x) {
-        const sound = new Audio(dingSound);
-        sound.play();
+        this.audioPlayer.playFromStart('ding', 0.75);
 
         this.currentScore++;
 
@@ -232,14 +237,11 @@ export class Game extends Engine {
         }
 
         if (this.currentScore === 10) {
-          const sound = new Audio(points10Sound);
-          sound.play();
+          this.audioPlayer.playFromStart('points10');
         } else if (this.currentScore === 25) {
-          const sound = new Audio(points25Sound);
-          sound.play();
+          this.audioPlayer.playFromStart('points25');
         } else if (this.currentScore === 50) {
-          const sound = new Audio(points50Sound);
-          sound.play();
+          this.audioPlayer.playFromStart('points50');
         }
 
         return;

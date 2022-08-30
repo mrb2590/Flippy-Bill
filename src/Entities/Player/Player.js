@@ -1,7 +1,8 @@
+import { AudioPlayer } from '../../Engine/AudioPlayer';
 import { Entity } from '../../Engine/Entity';
 import { Sprite } from '../../Engine/Sprite';
 import { Pipe } from '../Pipe/Pipe';
-import jumpSound from './wing-flap.mp3';
+import wingFlapSound from './wing-flap.mp3';
 import splatSound from './splat.mp3';
 import backflipSound from './backflip.mp3';
 import crashSound from './crash.mp3';
@@ -10,7 +11,7 @@ import spriteSrc from './player.png';
 export class Player extends Entity {
   static width = 64;
   static height = 64;
-  static jumpVelocity = -15;
+  static jumpVelocity = -12;
 
   static resetVals = {
     x: 200,
@@ -26,6 +27,14 @@ export class Player extends Entity {
       y: Player.resetVals.y
     });
 
+    this.audioPlayer = new AudioPlayer({
+      audioFiles: {
+        wingFlap: wingFlapSound,
+        splat: splatSound,
+        backflip: backflipSound,
+        crash: crashSound
+      }
+    });
     this.sprite = new Sprite({
       src: spriteSrc,
       game: this.game,
@@ -44,7 +53,7 @@ export class Player extends Entity {
     this.totalJumpTicks = 12 * this.sprite.ticksPerFrame;
     this.backflipTick = 0;
     this.isSplatting = false;
-    this.isBackFlipping = false;
+    this.isBackflipping = false;
     this.totalBackflipTicks = this.game.gravity * this.sprite.ticksPerFrame;
     this.backFlipAngle = 0;
     this.backFlipChance = 0.8;
@@ -92,16 +101,12 @@ export class Player extends Entity {
     this.jumpTick = 0;
     this.velocityY = Player.jumpVelocity;
 
-    if (Math.random() > this.backFlipChance && !this.isBackFlipping) {
-      this.isBackFlipping = true;
-      const sound = new Audio(backflipSound);
-      sound.volume = 1;
-      sound.play();
+    if (Math.random() > this.backFlipChance && !this.isBackflipping) {
+      this.isBackflipping = true;
+      this.audioPlayer.playFromStart('backflip');
     }
 
-    const sound = new Audio(jumpSound);
-    sound.volume = 0.3;
-    sound.play();
+    this.audioPlayer.playFromStart('wingFlap', 0.3);
   }
 
   handleJumpEvent () {
@@ -115,18 +120,15 @@ export class Player extends Entity {
   splat () {
     this.spriteSplat();
     this.isSplatting = true;
-    const sound = new Audio(splatSound);
-    sound.volume = 0.5;
-    sound.play();
+    this.audioPlayer.playFromStart('splat', 0.5);
   }
 
   crash () {
-    const sound = new Audio(crashSound);
-    sound.play();
+    this.audioPlayer.playFromStart('crash');
   }
 
   render () {
-    if (this.isBackFlipping) {
+    if (this.isBackflipping) {
       this.game.ctx.save();
       this.game.ctx.translate(
         this.x + Player.width / 2,
@@ -181,10 +183,10 @@ export class Player extends Entity {
       this.jumpTick++;
     }
 
-    if (this.isBackFlipping) {
+    if (this.isBackflipping) {
       if (this.backflipTick >= this.totalBackflipTicks) {
         this.backflipTick = 0;
-        this.isBackFlipping = false;
+        this.isBackflipping = false;
       }
 
       this.backFlipAngle =

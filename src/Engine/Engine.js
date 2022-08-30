@@ -1,3 +1,5 @@
+import { Physics } from './Physics';
+
 export class Engine {
   constructor ({ canvasId, canvasWidth, canvasHeight }) {
     this.canvas = document.getElementById(canvasId);
@@ -13,7 +15,7 @@ export class Engine {
     this.fps = null;
     this.debug = true;
     this.eventListeners = [];
-    this.gravity = 1;
+    this.physics = new Physics();
   }
 
   gameLoop (timestamp) {

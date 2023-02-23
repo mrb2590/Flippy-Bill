@@ -121,7 +121,7 @@ export class Game extends Engine {
 
     window.gtag('event', 'game_over', {
       score: this.currentScore,
-      best_score: this.best_score
+      top_score: this.topScore
     });
   }
 

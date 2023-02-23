@@ -118,6 +118,14 @@ export class Game extends Engine {
   startGameOver () {
     this.gameOver = true;
     this.audioPlayer.playFromStart('gameOver', 0.5);
+
+    window.ga('send', {
+      hitType: 'event',
+      eventCategory: 'Gameplay',
+      eventAction: 'gameover',
+      eventLabel: 'Game Over',
+      value: this.currentScore
+    });
   }
 
   renderGameOver () {

@@ -119,7 +119,7 @@ export class Game extends Engine {
     this.gameOver = true;
     this.audioPlayer.playFromStart('gameOver', 0.5);
 
-    window.gtag('event', 'GameOver', {
+    window.gtag('event', 'game_over', {
       score: this.currentScore,
       best_score: this.best_score
     });

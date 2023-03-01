@@ -1,5 +1,6 @@
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 require('dotenv').config();
@@ -40,6 +41,9 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         title: appName,
         template: './src/index.html'
+      }),
+      new CopyWebpackPlugin({
+        patterns: [{ from: 'static' }]
       })
     ],
     module: {

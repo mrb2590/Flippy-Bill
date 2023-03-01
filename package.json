@@ -13,6 +13,7 @@
   "author": "Mike Buonomo",
   "license": "MIT",
   "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "dotenv-webpack": "^8.0.1",

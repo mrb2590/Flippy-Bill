@@ -13,6 +13,10 @@ export class Backflip extends EntityAnimation {
     this.chance = 0.2;
   }
 
+  shouldBackflip () {
+    return Math.floor(Math.random() * 100) < 5;
+  }
+
   render () {
     super.render();
 

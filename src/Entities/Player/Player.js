@@ -129,7 +129,7 @@ export class Player extends Entity {
     this.velocityY = Player.jumpVelocity;
     this.audioPlayer.playFromStart('wingFlap', 0.3);
 
-    if (Math.random() <= this.backflipAnimation.chance) {
+    if (this.backflipAnimation.shouldBackflip()) {
       this.backflipAnimation.start();
       this.audioPlayer.playFromStart('backflip');
     }

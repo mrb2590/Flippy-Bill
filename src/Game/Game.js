@@ -30,7 +30,7 @@ export class Game extends Engine {
     this.inMenu = true;
     this.isPaused = false;
     this.currentScore = 0;
-    this.topScore = 0;
+    this.topScore = localStorage.getItem('high_score') ?? 0;
     this.scene = new Scene(this);
     this.player = new Player(this);
     this.eventListeners.push(() => {
@@ -123,6 +123,8 @@ export class Game extends Engine {
       score: this.currentScore,
       top_score: this.topScore
     });
+
+    localStorage.setItem('high_score', this.topScore);
   }
 
   renderGameOver () {
